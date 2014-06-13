@@ -26,6 +26,10 @@ snip = np.array(df['boilerplate'])
 target = np.array(df['label'])
 #print df['content'].head()
 
+# title = json.loads(snip)['title']
+# titlelen = len(title)/3
+snip = json.loads(snip)['title'] + ' ' + json.loads(snip)['body']
+
 vectorizer = TfidfVectorizer(max_df=0.5,
                              stop_words='english')
 
