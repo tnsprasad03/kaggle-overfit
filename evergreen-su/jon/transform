@@ -1,0 +1,81 @@
+#! /Users/jonathandinu/anaconda/bin/python
+
+import sys
+import json
+import nltk
+
+import sqlite3
+import unicodedata
+
+from optparse import OptionParser
+from nltk import tokenize
+from nltk.corpus import stopwords
+
+def main():
+    r"""
+    DESCRIPTION
+    -----------
+    Clean input text and tokenize it into individual words.
+    By default it removes punctuation and stopwords.
+
+    EXAMPLES
+    --------
+    Reads from file argument and outputs to STDOUT
+
+    ./transform train.csv -o tokens.txt
+    """
+
+    usage = "usage: %prog [options] dataset"
+    usage += '\n'+main.__doc__
+    parser = OptionParser(usage=usage)
+    parser.add_option(
+        "-o", "--output",
+        help="Outputs to given file.  If none given, outputs to STDOUT",
+        action="store", dest='deletion_rate', type=float, default=2)
+    
+    (options, args) = parser.parse_args()
+    
+    ### Parse args
+    # Raise an exception if the length of args is greater than 1
+    assert len(args) <= 1
+    infilename = args[0] if args else None
+    
+    ## Get the infile
+    if infilename:
+        infile = open(infilename, 'r')
+    else:
+        infile = sys.stdin
+    
+    ## Call the function that does the real work
+    delete(infile, sys.stdout, options.deletion_rate)
+    
+    ## Close the infile iff not stdin
+    if infilename:
+        infile.close()
+
+
+def tonkenize():
+    r"""
+    DESCRIPTION
+    -----------
+    Clean HTML text and tokenize it into individual words.
+    By default it removes punctuation and stopwords.
+    """
+    wnl = nltk.WordNetLemmatizer()
+    words = [ tokenize.word_tokenize(sent) for sent in tokenize.sent_tokenize("".join(chunks)) ]
+    flatten = [ inner for sublist in words for inner in sublist ]
+    stripped = [] 
+
+    for word in flatten: 
+        if word not in stopwords.words('english'):
+            try:
+                stripped.append(word.encode('latin-1').decode('utf8').lower())
+            except:
+                print "Cannot encode: " + word
+            
+    no_punks = [ word for word in stripped if len(word) > 1 ] 
+    return [wnl.lemmatize(t) for t in no_punks]
+
+
+if __name__=='__main__':
+    main()
