@@ -55,5 +55,5 @@ print "%s -- %s" % (model.__class__, np.mean(scores))
 
 model = RandomForestClassifier(verbose=10, n_estimators=1, n_jobs=-1, max_features=None)
 #model.fit(X.toarray(), target)
-scores = cross_validation.cross_val_score(model, X, target, cv=5)
+scores = cross_validation.cross_val_score(model, X.toarray(), target, cv=5)
 print "%s -- %s" % (model.__class__, np.mean(scores))
