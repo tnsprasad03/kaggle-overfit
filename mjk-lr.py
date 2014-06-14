@@ -13,6 +13,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import cross_validation
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
+from sklearn.grid_search import GridSearchCV
+
+from sklearn.svm import SVC
 
 def fromJson(a):
 	t = ' '
@@ -43,18 +46,40 @@ snip = np.array(snip)
 
 target = np.array(df['label'])
 
-vectorizer = TfidfVectorizer(max_df=0.5,
-                             stop_words='english')
+vectorizer = TfidfVectorizer(stop_words='english')
 
 
 
 X = vectorizer.fit_transform(snip)
-print X
+#print X
 snip = pd.DataFrame(X.toarray(0))
+for i in ['html_ratio', 'numberOfLinks', 'non_markup_alphanum_characters', 'frameTagRatio', 'avglinksize', 'spelling_errors_ratio', 'linkwordscore', 'commonlinkratio_2', 'parametrizedLinkRatio', 'commonlinkratio_1', 'commonlinkratio_3', 'image_ratio']:
+        snip[i] = df[i]
+'''
 snip['numberOfLinks'] = df['numberOfLinks']
+snip['non_markup_alphanum_characters'] = df['non_markup_alphanum_characters']
+snip['frameTagRatio'] = df['frameTagRatio']
+snip['avglinksize'] = df['avglinksize']
+snip['spelling_errors_ratio'] = df['spelling_errors_ratio']
+snip['linkwordscore'] = df ['linkwordscore']
+'''
+
+param_grid_lr = [
+        {'C': [ 1,1.5,2,3,4,5], 'penalty': ['l2'] },
+]
+
+param_grid_svc = [
+        {'C': [ 1,1.5,2,3,4,5], 'gamma': ['0', '.1', '1'], 'kernel': ['rbf', 'linear', 'poly'] },
+]
+
+#model  = LogisticRegression()
+model  = SVC()
+#scores = cross_validation.cross_val_score(model, snip, target, cv=5)
+#print "%s -- %s" % (model.__class__, np.mean(scores))
+
+clf = GridSearchCV(model, param_grid_svc, n_jobs=2, verbose=10)
+clf.fit(snip, target)
 
 
-model  = LogisticRegression(C=1, penalty='l2', tol=0.01)
-scores = cross_validation.cross_val_score(model, snip, target, cv=5)
-print "%s -- %s" % (model.__class__, np.mean(scores))
+
 
