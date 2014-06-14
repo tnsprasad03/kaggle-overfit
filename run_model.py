@@ -104,9 +104,11 @@ def main(argv):
       elif opt in ("-m"):
          model = arg
    print 'Input option is "', model
-   executeModel(model)
-
-
+   
+   if (model):
+      executeModel(model)
+   else:
+      print "Unable to run Model. Please check options"
 
 
 if __name__ == "__main__":
