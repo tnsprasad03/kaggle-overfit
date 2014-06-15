@@ -43,7 +43,7 @@ def executeModel(m):
    
    #df = pd.read_pickle("articles.pkl")
    df = pd.read_csv("data/train.tsv", na_values='?',delimiter='\t')
-   df = df[:2000]
+   df = df[:1000]
    print df.columns
    df = df.fillna(df.mean())
    '''
@@ -89,7 +89,7 @@ def executeModel(m):
    
    if m == 'lr':
       model  = LogisticRegression(C=1, penalty='l2', tol=0.01)
-      scores = cross_validation.cross_val_score(model, snip, target, cv=5)
+      scores = cross_validation.cross_val_score(model, X, target, cv=5)
       print "%s -- %s" % (model.__class__, np.mean(scores))
       # pred = model.predict_proba(X_test)[:,1]
       # testfile = p.read_csv('../data/test.tsv', sep="\t", na_values=['?'], index_col=1)
@@ -99,7 +99,7 @@ def executeModel(m):
 
    if m == 'rf':
       model = RandomForestClassifier(verbose=10, n_estimators=1, n_jobs=-1, max_features=None)
-      scores = cross_validation.cross_val_score(model, X.toarray(), target, cv=5)
+      scores = cross_validation.cross_val_score(model, X, target, cv=5)
       print "%s -- %s" % (model.__class__, np.mean(scores))
 
 
