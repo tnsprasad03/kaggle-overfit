@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.cluster import KMeans,MiniBatchKMeans
 from math import sqrt
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import CountVectorizer
 from sklearn import metrics
 import json
 from sklearn.linear_model import LogisticRegression
@@ -13,6 +14,7 @@ from sklearn import cross_validation
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import scale
+import pdb
 
 def createsubmission():
    t0 = time()
@@ -41,6 +43,7 @@ def executeModel(m):
    
    #df = pd.read_pickle("articles.pkl")
    df = pd.read_csv("data/train.tsv", na_values='?',delimiter='\t')
+   df = df[:2000]
    print df.columns
    df = df.fillna(df.mean())
    '''
@@ -59,19 +62,30 @@ def executeModel(m):
 
    target = np.array(df['label'])
 
-   vectorizer = TfidfVectorizer(max_df=0.5,stop_words='english',norm=u'l2')
+   #vectorizer = TfidfVectorizer(max_df=0.5,stop_words='english',norm=u'l2')
+   vectorizer = CountVectorizer(max_df=0.5,stop_words='english')
 
 
 
    X = vectorizer.fit_transform(snip)
-   print X
+   print X.shape
+   #pdb.set_trace()
    snip = pd.DataFrame(X.toarray(0))
    snip['numberOfLinks'] = df['numberOfLinks']
-   X2 = np.array(scale(df.iloc[:,5]))
-   X3 = np.array(scale(df.iloc[:,10]))
-   X4 = np.array(scale(df.iloc[:,16]))
+   
+   #X2 = np.array(scale(df.iloc[:,5]))
+   #X3 = np.array(scale(df.iloc[:,10]))
+   #X4 = np.array(scale(df.iloc[:,16]))
+   #print "Printing shape of X"+ str (X.shape)
+   #X2 = np.mat(scale(df.non_markup_alphanum_characters.values)).T
+   df_feats = df[['non_markup_alphanum_characters','frameTagRatio','avglinksize','spelling_errors_ratio','linkwordscore','html_ratio','compression_ratio','numberOfLinks','commonlinkratio_1','commonlinkratio_2','commonlinkratio_3','commonlinkratio_4','parametrizedLinkRatio','image_ratio','alchemy_category_score','numwords_in_url']]
+   #df_feats = scale(df)
+   X_feats = np.mat(df_feats.values)
 
-   X = np.hstack((X.toarray(),X2,X3,X4))
+   #X = np.hstack((X.toarray(),X2,X3,X4))
+   #X = np.hstack((X.toarray(),X_feats))
+   X = np.hstack((X.toarray(),X_feats))
+   #sys.exit()
    
    if m == 'lr':
       model  = LogisticRegression(C=1, penalty='l2', tol=0.01)
