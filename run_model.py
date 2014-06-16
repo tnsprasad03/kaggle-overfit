@@ -103,21 +103,23 @@ def executeModel(m):
       print "%s -- %s" % (model.__class__, np.mean(scores))
 
 
+def usage():
+      print 'run_model.py -m lr/rf ( lr for logistic and rf for random forest)'
 def main(argv):
    model = ""
 
    try:
       opts, args = getopt.getopt(argv,"hm:",["lr"])
    except getopt.GetoptError:
-      print 'run_model.py -i lr/rf ( lr for logistic and rf for random forest)'
+      usage()
       sys.exit(2)
    for opt, arg in opts:
       if opt == '-h':
-         print 'run_model.py -i lr/rf ( lr for logistic or rf for random forest)'
+         usage()
          sys.exit()
       elif opt in ("-m"):
          model = arg
-   print 'Input option is "', model
+   print 'Input option is %s' % (model)
    
    if (model):
       executeModel(model)
