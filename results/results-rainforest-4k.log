@@ -1,0 +1,29 @@
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:  3.1min
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:  3.1min finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:  3.1min
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:  3.1min finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:  2.1min
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:  2.1min finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:  2.0min
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:  2.0min finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:  3.4min
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:  3.4min finished
+[Parallel(n_jobs=1)]: Done   1 jobs       | elapsed:    0.0s
+[Parallel(n_jobs=1)]: Done   1 out of   1 | elapsed:    0.0s finished
+Input option is " rf
+Index([u'url', u'urlid', u'boilerplate', u'alchemy_category', u'alchemy_category_score', u'avglinksize', u'commonlinkratio_1', u'commonlinkratio_2', u'commonlinkratio_3', u'commonlinkratio_4', u'compression_ratio', u'embed_ratio', u'framebased', u'frameTagRatio', u'hasDomainLink', u'html_ratio', u'image_ratio', u'is_news', u'lengthyLinkDomain', u'linkwordscore', u'news_front_page', u'non_markup_alphanum_characters', u'numberOfLinks', u'numwords_in_url', u'parametrizedLinkRatio', u'spelling_errors_ratio', u'label'], dtype='object')
+(4000, 60597)
+building tree 1 of 1
+building tree 1 of 1
+building tree 1 of 1
+building tree 1 of 1
+building tree 1 of 1
+<class 'sklearn.ensemble.forest.RandomForestClassifier'> -- 0.6955
