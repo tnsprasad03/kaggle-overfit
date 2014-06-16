@@ -1,0 +1,27 @@
+Input option is " rf
+Index([u'url', u'urlid', u'boilerplate', u'alchemy_category', u'alchemy_category_score', u'avglinksize', u'commonlinkratio_1', u'commonlinkratio_2', u'commonlinkratio_3', u'commonlinkratio_4', u'compression_ratio', u'embed_ratio', u'framebased', u'frameTagRatio', u'hasDomainLink', u'html_ratio', u'image_ratio', u'is_news', u'lengthyLinkDomain', u'linkwordscore', u'news_front_page', u'non_markup_alphanum_characters', u'numberOfLinks', u'numwords_in_url', u'parametrizedLinkRatio', u'spelling_errors_ratio', u'label'], dtype='object')
+(5000, 68333)
+Traceback (most recent call last):
+  File "./run_model.py", line 129, in <module>
+    main(sys.argv[1:])
+  File "./run_model.py", line 123, in main
+    executeModel(model)
+  File "./run_model.py", line 102, in executeModel
+    scores = cross_validation.cross_val_score(model, X, target, cv=5)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/cross_validation.py", line 1152, in cross_val_score
+    for train, test in cv)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/externals/joblib/parallel.py", line 517, in __call__
+    self.dispatch(function, args, kwargs)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/externals/joblib/parallel.py", line 312, in dispatch
+    job = ImmediateApply(func, args, kwargs)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/externals/joblib/parallel.py", line 136, in __init__
+    self.results = func(*args, **kwargs)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/cross_validation.py", line 1060, in _cross_val_score
+    estimator.fit(X_train, y_train, **fit_params)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/ensemble/forest.py", line 257, in fit
+    check_ccontiguous=True)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/sklearn/utils/validation.py", line 230, in check_arrays
+    array = np.ascontiguousarray(array, dtype=dtype)
+  File "/home/ec2-user/anaconda/lib/python2.7/site-packages/numpy/core/numeric.py", line 548, in ascontiguousarray
+    return array(a, dtype, copy=False, order='C', ndmin=1)
+MemoryError
