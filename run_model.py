@@ -16,16 +16,25 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import scale
 import pdb
 
-def createsubmission():
-   t0 = time()
-   print_file = False
-   if print_file == True:
-       with open('overfit.csv', 'wb') as outfile:
-           outfile.write('urlid,label')
-           for urlid, label in urlid:
-               outfile.write(urlid,rating)
-           outfile.close()
-           print("done in %fs" % (time() - t0))
+def createsubmission(model,vectorizer):
+   traindata = list(np.array(pd.read_table('data/train.tsv'))[:,2])
+   testdata = list(np.array(pd.read_table('data/test.tsv'))[:,2])
+   y = np.array(pd.read_table('data/train.tsv'))[:,-1]
+   X_all = traindata + testdata
+   lentrain = len(traindata)
+   print "fitting pipeline"
+   vectorizer.fit(X_all)
+   print "transforming data"
+   X_all = vectorizer.transform(X_all)
+
+   X = X_all[:lentrain]
+   X_test = X_all[lentrain:]
+
+   model.fit(X,y)
+   pred = model.predict_proba(X_test)[:,1]
+   testfile = pd.read_csv('data/test.tsv', sep="\t", na_values=['?'], index_col=1)
+   pred_df = pd.DataFrame(pred, index=testfile.index, columns=['label'])
+   pred_df.to_csv(str(model).split("(")[0] + '.csv')
 
 
 def fromJson(a):
@@ -74,7 +83,7 @@ def executeModel(m):
    filtereddf = wordsdf[wordsdf['importance'] > 0.0001][['importance','index']]
    # print type(X[:,list(filtereddf['index'])])
    # print type(np.array(filtereddf['importance'])[np.newaxis,:])
-   X = X[:,list(filtereddf['index'])] * np.array(filtereddf['importance'])[np.newaxis,:]*1000
+   X = X[:,list(filtereddf['index'])] * np.exp(np.array(filtereddf['importance'])[np.newaxis,:]*100)
 
    print X.shape
    #pdb.set_trace()
@@ -96,19 +105,16 @@ def executeModel(m):
    #sys.exit()
    
    if m == 'lr':
-      model  = LogisticRegression(C=1, penalty='l2', tol=0.01)
+      model  = LogisticRegression(C=1, penalty='l2', tol=0.0001)
       scores = cross_validation.cross_val_score(model, X, target, cv=5)
       print "%s -- %s" % (model.__class__, np.mean(scores))
-      # pred = model.predict_proba(X_test)[:,1]
-      # testfile = p.read_csv('../data/test.tsv', sep="\t", na_values=['?'], index_col=1)
-      # pred_df = p.DataFrame(pred, index=testfile.index, columns=['label'])
-      # pred_df.to_csv('benchmark.csv')
-      # print "submission file created.."
+      createsubmission(model, vectorizer)
 
    if m == 'rf':
       model = RandomForestClassifier(verbose=10, n_estimators=1, n_jobs=-1, max_features=None)
       scores = cross_validation.cross_val_score(model, X, target, cv=5)
       print "%s -- %s" % (model.__class__, np.mean(scores))
+      createsubmission(model, vectorizer)
 
 
 def usage():
