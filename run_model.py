@@ -43,7 +43,7 @@ def executeModel(m):
    
    #df = pd.read_pickle("articles.pkl")
    df = pd.read_csv("data/train.tsv", na_values='?',delimiter='\t')
-   df = df[:1000]
+   #df = df[:1000]
    print df.columns
    df = df.fillna(df.mean())
    '''
@@ -62,16 +62,24 @@ def executeModel(m):
 
    target = np.array(df['label'])
 
-   #vectorizer = TfidfVectorizer(max_df=0.5,stop_words='english',norm=u'l2')
-   vectorizer = CountVectorizer(max_df=0.5,stop_words='english')
+   vectorizer = TfidfVectorizer(max_df=0.5,stop_words='english',norm=u'l2')
+   #vectorizer = CountVectorizer(max_df=0.5,stop_words='english')
 
 
 
-   X = vectorizer.fit_transform(snip)
+   X = vectorizer.fit_transform(snip).toarray()
+   print X.shape
+
+   wordsdf = pd.read_pickle('bagimportant.pkl')
+   filtereddf = wordsdf[wordsdf['importance'] > 0.0001][['importance','index']]
+   # print type(X[:,list(filtereddf['index'])])
+   # print type(np.array(filtereddf['importance'])[np.newaxis,:])
+   X = X[:,list(filtereddf['index'])] * np.array(filtereddf['importance'])[np.newaxis,:]*1000
+
    print X.shape
    #pdb.set_trace()
-   snip = pd.DataFrame(X.toarray(0))
-   snip['numberOfLinks'] = df['numberOfLinks']
+   # snip = pd.DataFrame(X.toarray(0))
+   # snip['numberOfLinks'] = df['numberOfLinks']
    
    #X2 = np.array(scale(df.iloc[:,5]))
    #X3 = np.array(scale(df.iloc[:,10]))
@@ -84,7 +92,7 @@ def executeModel(m):
 
    #X = np.hstack((X.toarray(),X2,X3,X4))
    #X = np.hstack((X.toarray(),X_feats))
-   X = np.hstack((X.toarray(),X_feats))
+   X = np.hstack((X,X_feats))
    #sys.exit()
    
    if m == 'lr':
